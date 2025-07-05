@@ -35,7 +35,6 @@ make all
 
 ## Documentation
 Full report in docs/full-report.md
-(Slides coming soon)
 
 ## License
 MIT License
