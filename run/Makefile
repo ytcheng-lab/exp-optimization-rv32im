@@ -5,8 +5,11 @@ SPIKE = /home/yutung/RISCV-TOOLS/spike/bin/spike
 ISA = rv32im_zicsr_zicntr
 RV_OPT = -march=$(ISA) -mabi=ilp32
 
+build_debug:
+	$(RV_GCC) $(RV_OPT) -DDEBUG ../src/main.c ../src/algo.c ../src/data.S -I../src -lm -o exp-opt.exe
+
 build:
-	$(RV_GCC) $(RV_OPT) ../src/main.c ../src/exp.c ../src/data.S -I../src -lm -o exp-opt.exe
+	$(RV_GCC) $(RV_OPT) ../src/main.c ../src/algo.c ../src/data.S -I../src -lm -o exp-opt.exe
 
 run:
 	$(SPIKE) --isa=$(ISA) $(PK) exp-opt.exe
