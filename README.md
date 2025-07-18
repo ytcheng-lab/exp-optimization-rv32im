@@ -34,8 +34,8 @@ make all
 ```
 
 ## Documentation
-Full report in docs/full-report.md
-Concept slide in docs/softmax_rv32im_concept_slides.pdf
+- Full report in docs/full-report.md
+- Concept slide in docs/softmax_rv32im_concept_slides.pdf
 
 ## License
 MIT License
