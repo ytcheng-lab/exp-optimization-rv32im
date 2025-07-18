@@ -22,22 +22,21 @@ int main()
     float max_err = 0;
 
     uint32_t cycles_baseline, cycles_speedup;
-    printf("#######################################################\n");
-    printf("Test required cycle counts for %d fp32 softmax calculations\n", N);
-    printf("Input: uniform distributed [0, 10)\n", N);
-    printf("#######################################################\n");
+    printf("=======================================================\n");
+    printf("Softmax Benchmark: %d float32 inputs [0, 10)\n", N);
+    printf("Target: RV32IM (no FPU), Measured via mcycle\n");
+    printf("Method: Taylor series + LUT\n");
+    printf("=======================================================\n");
  
     // --- CMATH: Test baseline and golden value ---
     cycles_baseline = read_cycle();
     softmax_golden(i, o_g, N);
     cycles_baseline = read_cycle() - cycles_baseline;
-    printf("cmath required cycles: %d\n", cycles_baseline);
 
     // --- SPEEDUP: Test speedup version ---
     cycles_speedup = read_cycle();
     softmax_taylor_LUT(i, o_t, N);
     cycles_speedup = read_cycle() - cycles_speedup;
-    printf("Speedup version 2: \nrequired cycles: %d\n", cycles_speedup);
 
     // --- VERIFY: Compare Test with golden ---
     for (int k = 0; k < N; k++) {
@@ -51,8 +50,14 @@ int main()
     }
    
     float result = cycles_speedup / 1.0 / cycles_baseline;
-    printf("#######################################################\n");
+    float speedup_percentage = (1 - result) * 100.0f;
+
+    printf("=======================================================\n");
     printf("                         Result                        \n");
-    printf("#######################################################\n"); 
-    printf("Time reduced: %.2f%%\nMax error(abs): %.4f\n", (1.0 - result)*100.0f, max_err);
+    printf("=======================================================\n"); 
+    printf("[Baseline]  glibc expf():       %u cycles\n", cycles_baseline);
+    printf("[Optimized] Taylor3 + Horner:   %u cycles\n", cycles_speedup);
+    printf("[Speedup]   %.2f%% time reduction\n", speedup_percentage);
+    printf("[Accuracy]  Max absolute error: %.5f\n", max_err);
+
 }
